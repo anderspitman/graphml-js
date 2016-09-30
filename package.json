@@ -32,5 +32,8 @@
     "typescript": "^2.0.3",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "xml2js": "^0.4.17"
   }
 }
