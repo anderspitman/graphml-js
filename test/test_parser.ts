@@ -12,8 +12,10 @@ describe('graphml parser', function() {
     parser.parse(graphmlText, function(err: any, graph: Graph) {
         assert(graph.nodes !== undefined);
         assert(graph.edges !== undefined);
-
-        //assert(graph.nodes[0].id == "n0");
+        assert.equal(graph.nodes.length, 37);
+        assert.equal(graph.nodes[0].getId(), "n0");
+        assert.equal(graph.nodes[1].getId(), "n1");
+        assert.equal(graph.nodes[36].getId(), "n36");
     });
   });
 });

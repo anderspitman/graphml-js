@@ -45,6 +45,10 @@ gulp.task("test", ["compile-src", "compile-tests"], function() {
         }));
 });
 
+gulp.task("autotest", function() {
+    return gulp.watch(['src/*.ts', 'test/*.ts'], ['test']);
+});
+
 gulp.task("default", bundle);
 watchedBrowserify.on("update", bundle);
 watchedBrowserify.on("log", gutil.log);
