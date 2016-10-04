@@ -7,10 +7,16 @@ var watchify = require("watchify");
 var tsify = require("tsify");
 var gutil = require("gulp-util");
 
+var tsOptions = {
+  noImplicitAny: true,
+  target: 'es5'
+};
+
+
 var watchedBrowserify = watchify(browserify({
     basedir: '.',
     debug: true,
-    entries: ['src/graphml_parser.ts'],
+    entries: ['src/parser.ts'],
     cache: {},
     packageCache: {}
 }).plugin(tsify));
@@ -24,17 +30,13 @@ function bundle() {
 
 gulp.task("compile-src", function() {
     return gulp.src('src/*.ts')
-        .pipe(ts({
-            noImplicitAny: true,
-        }))
+        .pipe(ts(tsOptions))
         .pipe(gulp.dest('src'));
 });
 
 gulp.task("compile-tests", function() {
     return gulp.src('test/test*.ts')
-        .pipe(ts({
-            noImplicitAny: true,
-        }))
+        .pipe(ts(tsOptions))
         .pipe(gulp.dest('test'));
 });
 
