@@ -1,5 +1,5 @@
 {
-  "name": "graphml.js",
+  "name": "graphml-js",
   "version": "0.1.0",
   "description": "GraphML parser for javascript",
   "main": "dist/graphml.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anderspitman/graphml.js.git"
+    "url": "git+https://github.com/anderspitman/graphml-js.git"
   },
   "keywords": [
     "graphml",
@@ -17,9 +17,9 @@
   "author": "Anders Pitman",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/anderspitman/graphml.js/issues"
+    "url": "https://github.com/anderspitman/graphml-js/issues"
   },
-  "homepage": "https://github.com/anderspitman/graphml.js#readme",
+  "homepage": "https://github.com/anderspitman/graphml-js#readme",
   "devDependencies": {
     "@types/node": "^6.0.41",
     "gulp": "^3.9.1",
