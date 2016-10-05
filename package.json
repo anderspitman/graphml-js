@@ -2,7 +2,7 @@
   "name": "graphml.js",
   "version": "0.1.0",
   "description": "GraphML parser for javascript",
-  "main": "index.js",
+  "main": "dist/graphml.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,16 +22,14 @@
   "homepage": "https://github.com/anderspitman/graphml.js#readme",
   "devDependencies": {
     "@types/node": "^6.0.41",
-    "browserify": "^13.1.0",
     "gulp": "^3.9.1",
     "gulp-mocha": "^3.0.1",
+    "gulp-rename": "^1.2.2",
     "gulp-typescript": "^3.0.1",
-    "gulp-util": "^3.0.7",
+    "gulp-rename": "^1.2.2",
+    "del": "^2.2.2",
     "mocha": "^3.1.0",
-    "tsify": "^1.0.7",
-    "typescript": "^2.0.3",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "typescript": "^2.0.3"
   },
   "dependencies": {
     "xml2js": "^0.4.17"

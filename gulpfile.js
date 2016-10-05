@@ -1,38 +1,30 @@
-var gulp = require("gulp");
-var ts = require("gulp-typescript");
-var mocha = require("gulp-mocha");
-var browserify = require("browserify");
-var source = require('vinyl-source-stream');
-var watchify = require("watchify");
-var tsify = require("tsify");
-var gutil = require("gulp-util");
+var gulp = require('gulp');
+var ts = require('gulp-typescript');
+var mocha = require('gulp-mocha');
+var rename = require('gulp-rename');
+var del = require('del');
 
 var tsOptions = {
   noImplicitAny: true,
-  target: 'es5'
+  target: 'es5',
+  module: 'commonjs'
 };
 
+gulp.task("default", ["compile-src"], build);
 
-var watchedBrowserify = watchify(browserify({
-    basedir: '.',
-    debug: true,
-    entries: ['src/parser.ts'],
-    cache: {},
-    packageCache: {}
-}).plugin(tsify));
+gulp.task("compile-src", compile);
 
-function bundle() {
-    return watchedBrowserify
-        .bundle()
-        .pipe(source('bundle.js'))
-        .pipe(gulp.dest("dist"));
-}
-
-gulp.task("compile-src", function() {
+function compile() {
     return gulp.src('src/*.ts')
         .pipe(ts(tsOptions))
         .pipe(gulp.dest('src'));
-});
+}
+
+function build() {
+    return gulp.src('src/parser.js')
+        .pipe(rename('graphml.js'))
+        .pipe(gulp.dest('dist'));
+}
 
 gulp.task("compile-tests", function() {
     return gulp.src('test/test*.ts')
@@ -51,6 +43,10 @@ gulp.task("autotest", function() {
     return gulp.watch(['src/*.ts', 'test/*.ts'], ['test']);
 });
 
-gulp.task("default", bundle);
-watchedBrowserify.on("update", bundle);
-watchedBrowserify.on("log", gutil.log);
+gulp.task("clean", function() {
+    return del([
+        'dist/*',
+        'src/*.js',
+        'test/*.js'
+    ]);
+});
