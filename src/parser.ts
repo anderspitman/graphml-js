@@ -3,7 +3,7 @@
 import { Parser } from 'xml2js';
 
 export interface AttributeMap {
-    [key: string]: string;
+    [key: string]: any;
 }
 
 export abstract class GraphElement {
@@ -157,7 +157,19 @@ export class GraphMLParser {
             const attributeKey: string = attribute['$'].key;
             const attributeName: string = this.keys[attributeKey].name;
             const attributeValue: string = attribute['_'];
-            newAttr[attributeName] = attributeValue;
+            const attributeDataType: string = this.keys[attributeKey].dataType;
+
+            if (attributeDataType === 'int' ||
+                attributeDataType === 'long' ||
+                attributeDataType === 'float' ||
+                attributeDataType === 'double') {
+                
+                newAttr[attributeName] = Number(attributeValue);
+
+            }
+            else {
+                newAttr[attributeName] = attributeValue;
+            }
         }
     }
 }

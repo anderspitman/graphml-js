@@ -140,7 +140,16 @@ var GraphMLParser = (function () {
             var attributeKey = attribute['$'].key;
             var attributeName = this.keys[attributeKey].name;
             var attributeValue = attribute['_'];
-            newAttr[attributeName] = attributeValue;
+            var attributeDataType = this.keys[attributeKey].dataType;
+            if (attributeDataType === 'int' ||
+                attributeDataType === 'long' ||
+                attributeDataType === 'float' ||
+                attributeDataType === 'double') {
+                newAttr[attributeName] = Number(attributeValue);
+            }
+            else {
+                newAttr[attributeName] = attributeValue;
+            }
         }
     };
     return GraphMLParser;
