@@ -118,7 +118,9 @@ var GraphMLParser = (function () {
             var node = nodes_1[_i];
             var id = node['$'].id;
             var newNode = new Node(id);
-            this.buildAttributes(newNode.attributes, node.data);
+            if (node.data !== undefined) {
+                this.buildAttributes(newNode.attributes, node.data);
+            }
             this.graph.nodes.push(newNode);
         }
     };
@@ -130,7 +132,9 @@ var GraphMLParser = (function () {
             var source = edge['$'].source;
             var target = edge['$'].target;
             var newEdge = new Edge(id, source, target);
-            this.buildAttributes(newEdge.attributes, edge.data);
+            if (edge.data !== undefined) {
+                this.buildAttributes(newEdge.attributes, edge.data);
+            }
             this.graph.edges.push(newEdge);
         }
     };

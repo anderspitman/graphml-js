@@ -132,7 +132,10 @@ export class GraphMLParser {
             const id = node['$'].id;
 
             let newNode: Node = new Node(id);
-            this.buildAttributes(newNode.attributes, node.data);
+
+            if (node.data !== undefined) {
+                this.buildAttributes(newNode.attributes, node.data);
+            }
             this.graph.nodes.push(newNode);
         }
     }
@@ -147,7 +150,10 @@ export class GraphMLParser {
             const target: string = edge['$'].target;
 
             let newEdge: Edge = new Edge(id, source, target);
-            this.buildAttributes(newEdge.attributes, edge.data);
+
+            if (edge.data !== undefined) {
+                this.buildAttributes(newEdge.attributes, edge.data);
+            }
             this.graph.edges.push(newEdge);
         }
     }
