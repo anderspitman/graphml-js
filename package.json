@@ -1,6 +1,6 @@
 {
   "name": "graphml-js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "GraphML parser for javascript",
   "main": "dist/graphml.js",
   "scripts": {
@@ -26,7 +26,6 @@
     "gulp-mocha": "^3.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-typescript": "^3.0.1",
-    "gulp-rename": "^1.2.2",
     "del": "^2.2.2",
     "mocha": "^3.1.0",
     "typescript": "^2.0.3"
