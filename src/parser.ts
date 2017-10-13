@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import { Parser } from 'xml2js';
 
 export interface AttributeMap {

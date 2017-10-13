@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import * as fs from 'fs';
 import * as assert from 'assert';
 import { Graph, GraphMLParser, AttributeMap } from '../src/parser';
