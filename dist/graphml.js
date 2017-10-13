@@ -1,12 +1,17 @@
-/// <reference path="../typings/index.d.ts" />
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var xml2js_1 = require('xml2js');
-var GraphElement = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var xml2js_1 = require("xml2js");
+var GraphElement = /** @class */ (function () {
     function GraphElement(id) {
         this.id = id;
         this.attributes = {};
@@ -34,20 +39,21 @@ var GraphElement = (function () {
     return GraphElement;
 }());
 exports.GraphElement = GraphElement;
-var Node = (function (_super) {
+var Node = /** @class */ (function (_super) {
     __extends(Node, _super);
     function Node(id) {
-        _super.call(this, id);
+        return _super.call(this, id) || this;
     }
     return Node;
 }(GraphElement));
 exports.Node = Node;
-var Edge = (function (_super) {
+var Edge = /** @class */ (function (_super) {
     __extends(Edge, _super);
     function Edge(id, source, target) {
-        _super.call(this, id);
-        this.source = source;
-        this.target = target;
+        var _this = _super.call(this, id) || this;
+        _this.source = source;
+        _this.target = target;
+        return _this;
     }
     Object.defineProperty(Edge.prototype, "source", {
         get: function () {
@@ -72,7 +78,7 @@ var Edge = (function (_super) {
     return Edge;
 }(GraphElement));
 exports.Edge = Edge;
-var Graph = (function () {
+var Graph = /** @class */ (function () {
     function Graph() {
         this.nodes = new Array();
         this.edges = new Array();
@@ -80,14 +86,14 @@ var Graph = (function () {
     return Graph;
 }());
 exports.Graph = Graph;
-var AttributeKey = (function () {
+var AttributeKey = /** @class */ (function () {
     function AttributeKey(name, dataType) {
         this.name = name;
         this.dataType = dataType;
     }
     return AttributeKey;
 }());
-var GraphMLParser = (function () {
+var GraphMLParser = /** @class */ (function () {
     function GraphMLParser() {
         this.keys = {};
         this.graph = new Graph();

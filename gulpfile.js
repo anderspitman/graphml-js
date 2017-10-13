@@ -3,9 +3,11 @@ var ts = require('gulp-typescript');
 var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
 var del = require('del');
+var merge = require('merge-stream');
 
 var tsOptions = {
   noImplicitAny: true,
+  declaration: true,
   target: 'es5',
   module: 'commonjs'
 };
@@ -21,9 +23,16 @@ function compile() {
 }
 
 function build() {
-    return gulp.src('src/parser.js')
+    var main = gulp.src('src/parser.js')
         .pipe(rename('graphml.js'))
         .pipe(gulp.dest('dist'));
+    var typings = gulp.src('src/parser.d.ts')
+        .pipe(rename('index.d.ts'))
+        .pipe(gulp.dest('dist'));
+    return merge(main, typings);
+}
+
+function typings() {
 }
 
 gulp.task("compile-tests", function() {

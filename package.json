@@ -3,6 +3,10 @@
   "version": "0.4.0",
   "description": "GraphML parser for javascript",
   "main": "dist/graphml.js",
+  "typings": "dist/index.d.ts",
+  "typescript": {
+    "definitions": "dist/index.d.ts"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,16 +25,19 @@
   },
   "homepage": "https://github.com/anderspitman/graphml-js#readme",
   "devDependencies": {
+    "@types/mocha": "^2.2.43",
     "@types/node": "^6.0.41",
+    "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-mocha": "^3.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-typescript": "^3.0.1",
-    "del": "^2.2.2",
+    "merge-stream": "^1.0.1",
     "mocha": "^3.1.0",
     "typescript": "^2.0.3"
   },
   "dependencies": {
+    "@types/xml2js": "^0.4.0",
     "xml2js": "^0.4.17"
   }
 }
