@@ -95,3 +95,20 @@ Graph {
      Edge { _id: 'e5', _attributes: {}, _source: 'n3', _target: 'n5' },
      Edge { _id: 'e6', _attributes: [Object], _source: 'n5', _target: 'n4' } ] }
 ```
+
+# Contribution
+
+## Build from source
+The output directory is `dist`.
+
+```bash
+$ npm install
+$ gulp
+```
+
+## Run tests
+
+```bash
+$ gulp test
+```
+

@@ -2,3 +2,4 @@ src/*.js
 test/*.js
 src/*.d.ts
 test/*.d.ts
+node_modules
