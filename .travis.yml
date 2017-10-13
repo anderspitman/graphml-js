@@ -1,0 +1,30 @@
+language: node_js
+
+node_js:
+  - 'stable'
+  - '7'
+  - '6'
+
+sudo: false
+
+env:
+  - workerCount=3
+
+matrix:
+  fast_finish: true
+
+branches:
+  only:
+  - master
+
+install:
+  - npm install
+  - npm install -g gulp-cli
+
+script:
+  - gulp test
+
+cache:
+  directories:
+    - node_modules
+
