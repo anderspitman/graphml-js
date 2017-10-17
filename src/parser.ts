@@ -1,5 +1,5 @@
 import { Parser } from 'xml2js';
-import { schema } from './schema';
+import * as schema from './schema';
 
 export interface AttributeMap {
     [key: string]: any;

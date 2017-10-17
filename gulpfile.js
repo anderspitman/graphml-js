@@ -26,8 +26,7 @@ function build() {
     var main = gulp.src('src/parser.js')
         .pipe(rename('graphml.js'))
         .pipe(gulp.dest('dist'));
-    var typings = gulp.src('src/parser.d.ts')
-        .pipe(rename('index.d.ts'))
+    var typings = gulp.src('src/*.d.ts')
         .pipe(gulp.dest('dist'));
     return merge(main, typings);
 }
