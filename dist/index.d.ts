@@ -1,3 +1,4 @@
+import { schema } from './schema';
 export interface AttributeMap {
     [key: string]: any;
 }
@@ -19,9 +20,14 @@ export declare class Edge extends GraphElement {
     constructor(id: string, source: string, target: string);
 }
 export declare class Graph {
-    nodes: Array<Node>;
-    edges: Array<Edge>;
-    constructor();
+    readonly nodes: Array<Node>;
+    readonly edges: Array<Edge>;
+    private constructor();
+    static create(keyElements: schema.GraphKeyElement[], graphElement: schema.GraphElement): Graph;
+    private static buildKeys(elements);
+    private static buildNodes(keys, elements);
+    private static buildEdges(keys, elements);
+    private static buildAttributes(keys, newAttr, attributes);
 }
 export declare class GraphMLParser {
     parse(text: string, cb?: Function): void;
