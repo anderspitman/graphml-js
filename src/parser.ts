@@ -76,8 +76,13 @@ export class Graph {
         return new Graph(nodes, edges);
     }
 
-    private static buildKeys(elements: schema.GraphKeyElement[]): AttributeKeyMap {
+    private static buildKeys(elements: schema.GraphKeyElement[] | null): AttributeKeyMap {
+        if (typeof(elements) === undefined || elements == null) {
+            return {};
+        }
+
         let keys: AttributeKeyMap = {};
+
 
         for (let elem of elements) {
             const keyId: string = elem.$['id'];
@@ -90,7 +95,11 @@ export class Graph {
         return keys;
     }
 
-    private static buildNodes(keys: AttributeKeyMap, elements: schema.GraphNodeElement[]): Array<Node> {
+    private static buildNodes(keys: AttributeKeyMap, elements: schema.GraphNodeElement[] | null): Array<Node> {
+        if (typeof(elements) === undefined || elements == null) {
+            return [];
+        }
+
         let nodes = new Array<Node>();
 
         for (let node of elements) {
@@ -107,7 +116,11 @@ export class Graph {
         return nodes;
     }
 
-    private static buildEdges(keys: AttributeKeyMap, elements: schema.GraphEdgeElement[]) {
+    private static buildEdges(keys: AttributeKeyMap, elements: schema.GraphEdgeElement[] | null) {
+        if (typeof(elements) === undefined || elements == null) {
+            return [];
+        }
+
         let edges = new Array<Edge>();
 
         for (let edge of elements) {

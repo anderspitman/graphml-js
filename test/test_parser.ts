@@ -75,4 +75,15 @@ describe('graphml parser', function() {
         assert(graphs[2].edges.length === 2);
     });
   });
+
+  it('parse a graph with no edge', function() {
+    let graphmlText = fs.readFileSync('test/data/test2.graphml', 'utf8');
+
+    parser.parse(graphmlText, function(err: any, graphs: Graph[]) {
+        assert(graphs.length === 1);
+        assert(graphs[0].nodes.length === 0);
+        assert(graphs[0].edges.length === 0);
+    });
+  });
+
 });

@@ -90,6 +90,9 @@ var Graph = /** @class */ (function () {
         return new Graph(nodes, edges);
     };
     Graph.buildKeys = function (elements) {
+        if (typeof (elements) === undefined || elements == null) {
+            return {};
+        }
         var keys = {};
         for (var _i = 0, elements_1 = elements; _i < elements_1.length; _i++) {
             var elem = elements_1[_i];
@@ -102,6 +105,9 @@ var Graph = /** @class */ (function () {
         return keys;
     };
     Graph.buildNodes = function (keys, elements) {
+        if (typeof (elements) === undefined || elements == null) {
+            return [];
+        }
         var nodes = new Array();
         for (var _i = 0, elements_2 = elements; _i < elements_2.length; _i++) {
             var node = elements_2[_i];
@@ -115,6 +121,9 @@ var Graph = /** @class */ (function () {
         return nodes;
     };
     Graph.buildEdges = function (keys, elements) {
+        if (typeof (elements) === undefined || elements == null) {
+            return [];
+        }
         var edges = new Array();
         for (var _i = 0, elements_3 = elements; _i < elements_3.length; _i++) {
             var edge = elements_3[_i];
