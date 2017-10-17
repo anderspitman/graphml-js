@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="key0" for="edge" attr.name="family" attr.type="long" />
+  <key id="key1" for="node" attr.name="group" attr.type="long" />
+  <key id="key2" for="node" attr.name="label" attr.type="string" />
+  <key id="key3" for="edge" attr.name="length" attr.type="float" />
+  <graph id="G1" edgedefault="undirected" parse.nodeids="free" parse.edgeids="canonical" parse.order="nodesfirst">
+    <node id="n1">
+      <data key="key1">1</data>
+      <data key="key2">GL-1</data>
+    </node>
+    <node id="n2">
+      <data key="key1">1</data>
+      <data key="key2">GL-2</data>
+    </node>
+    <edge id="e0" source="n1" target="n2">
+      <data key="key0">13</data>
+      <data key="key3">0</data>
+    </edge>
+  </graph>
+  <graph id="G2" edgedefault="undirected" parse.nodeids="free" parse.edgeids="canonical" parse.order="nodesfirst">
+    <node id="n4">
+      <data key="key1">1</data>
+      <data key="key2">GL-5</data>
+    </node>
+    <node id="n5">
+      <data key="key1">1</data>
+      <data key="key2">GL-9</data>
+    </node>
+    <node id="n6">
+      <data key="key1">1</data>
+      <data key="key2">GL-10</data>
+    </node>
+    <node id="n7">
+      <data key="key1">1</data>
+      <data key="key2">GL-3</data>
+    </node>
+    <edge id="e4" source="n4" target="n7">
+      <data key="key0">2</data>
+      <data key="key3">1e-08</data>
+    </edge>
+    <edge id="e5" source="n3" target="n5">
+      <data key="key0">2</data>
+      <data key="key3">1e-08</data>
+    </edge>
+    <edge id="e6" source="n6" target="n5">
+      <data key="key0">5</data>
+      <data key="key3">0</data>
+    </edge>
+    <edge id="e7" source="n5" target="n7">
+      <data key="key0">5</data>
+      <data key="key3">1e-08</data>
+    </edge>
+  </graph>
+  <graph id="G3" edgedefault="undirected" parse.nodeids="free" parse.edgeids="canonical" parse.order="nodesfirst">
+    <node id="n11">
+      <data key="key1">1</data>
+      <data key="key2">GL-8</data>
+    </node>
+    <node id="n12">
+      <data key="key1">3</data>
+      <data key="key2">GL-12</data>
+    </node>
+    <node id="n13">
+      <data key="key1">4</data>
+      <data key="key2">SM-NA12001</data>
+    </node>
+    <edge id="e11" source="n11" target="n12">
+      <data key="key0">10</data>
+      <data key="key3">1e-08</data>
+    </edge>
+    <edge id="e12" source="n12" target="n13">
+      <data key="key0">7</data>
+      <data key="key3">0</data>
+    </edge>
+  </graph>
+</graphml>

@@ -1,4 +1,5 @@
 import { Parser } from 'xml2js';
+import { schema } from './schema';
 
 export interface AttributeMap {
     [key: string]: any;
@@ -90,6 +91,24 @@ interface AttributeKeyMap {
 }
 
 export class GraphMLParser {
+    public parse(text: string, cb?: Function) {
+
+        let parser = new Parser();
+
+        parser.parseString(text, (err: any, document: schema.GraphMLDocument) => {
+            if (err) {
+                cb(err, []);
+                return;
+            }
+
+            let graphs = document.graphml.graph;
+            let keys = document.graphml.key;
+            cb(err, graphs.map((graph: schema.GraphElement) => new GraphBuilder().build(keys, graph)));
+        });
+    }
+}
+
+class GraphBuilder {
     private keys: AttributeKeyMap;
     private graph: Graph;
 
@@ -98,36 +117,27 @@ export class GraphMLParser {
         this.graph = new Graph();
     }
 
-    public parse(text: string, cb?: Function) {
-
-        let parser = new Parser();
-
-        parser.parseString(text, (err: any, data: any) => {
-            this.buildKeys(data);
-            this.buildNodes(data);
-            this.buildEdges(data);
-
-            cb(err, this.graph);
-        });
+    public build(keys: schema.GraphKeyElement[], element: schema.GraphElement): Graph {
+        this.buildKeys(keys);
+        this.buildNodes(element.node);
+        this.buildEdges(element.edge);
+        return this.graph;
     }
 
-    private buildKeys(data: any) {
-        for (let i in data.graphml.key) {
-            const key: any = data.graphml.key[i]['$'];
-            const keyId: string = key.id;
-            const name: string = key['attr.name'];
-            const dataType: string = key['attr.type'];
+    private buildKeys(elements: schema.GraphKeyElement[]) {
+        for (let elem of elements) {
+            const keyId: string = elem.$['id'];
+            const name: string = elem.$['attr.name'];
+            const dataType: string = elem.$['attr.type'];
             const newKey: AttributeKey = new AttributeKey(name, dataType);
             this.keys[keyId] = newKey;
         }
     }
 
-    private buildNodes(data: any) {
+    private buildNodes(elements: schema.GraphNodeElement[]) {
 
-        const nodes: any = data.graphml.graph[0].node;
-
-        for (let node of nodes) {
-            const id = node['$'].id;
+        for (let node of elements) {
+            const id = node.$['id'];
 
             let newNode: Node = new Node(id);
 
@@ -138,14 +148,12 @@ export class GraphMLParser {
         }
     }
 
-    private buildEdges(data: any) {
+    private buildEdges(elements: schema.GraphEdgeElement[]) {
 
-        const edges: any = data.graphml.graph[0].edge;
-
-        for (let edge of edges) {
-            const id: string  = edge['$'].id;
-            const source: string = edge['$'].source;
-            const target: string = edge['$'].target;
+        for (let edge of elements) {
+            const id: string = edge.$['id']
+            const source: string = edge.$['source'];
+            const target: string = edge.$['target'];
 
             let newEdge: Edge = new Edge(id, source, target);
 
@@ -156,18 +164,18 @@ export class GraphMLParser {
         }
     }
 
-    private buildAttributes(newAttr: AttributeMap, attributes: any) {
+    private buildAttributes(newAttr: AttributeMap, attributes: schema.GraphDataElement[]) {
         for (let attribute of attributes) {
-            const attributeKey: string = attribute['$'].key;
+            const attributeKey: string = attribute.$['key'];
             const attributeName: string = this.keys[attributeKey].name;
-            const attributeValue: string = attribute['_'];
+            const attributeValue: string = attribute._;
             const attributeDataType: string = this.keys[attributeKey].dataType;
 
             if (attributeDataType === 'int' ||
                 attributeDataType === 'long' ||
                 attributeDataType === 'float' ||
                 attributeDataType === 'double') {
-                
+
                 newAttr[attributeName] = Number(attributeValue);
 
             }
