@@ -20,6 +20,8 @@ export module schema {
 
     export interface GraphKeyElement {
         '$': Attribute;
+        // at most one value
+        defaultValue: string[];
     }
 
     export interface GraphElement {

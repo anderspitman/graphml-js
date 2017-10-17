@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
-  <key id="key0" for="edge" attr.name="family" attr.type="long" />
+  <key id="key0" for="edge" attr.name="family" attr.type="long">
+    <default>3</default>
+  </key>
   <key id="key1" for="node" attr.name="group" attr.type="long" />
   <key id="key2" for="node" attr.name="label" attr.type="string" />
   <key id="key3" for="edge" attr.name="length" attr.type="float" />
