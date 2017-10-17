@@ -24,12 +24,5 @@ export declare class Graph {
     constructor();
 }
 export declare class GraphMLParser {
-    private keys;
-    private graph;
-    constructor();
     parse(text: string, cb?: Function): void;
-    private buildKeys(data);
-    private buildNodes(data);
-    private buildEdges(data);
-    private buildAttributes(newAttr, attributes);
 }
