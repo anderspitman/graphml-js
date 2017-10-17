@@ -67,12 +67,84 @@ export class Edge extends GraphElement {
 }
 
 export class Graph {
-    nodes: Array<Node>;
-    edges: Array<Edge>;
+    private constructor(public readonly nodes: Array<Node>, public readonly edges: Array<Edge>) { }
 
-    constructor() {
-        this.nodes = new Array<Node>();
-        this.edges = new Array<Edge>();
+    public static create(keyElements: schema.GraphKeyElement[], graphElement: schema.GraphElement): Graph {
+        let keys = this.buildKeys(keyElements);
+        let nodes = this.buildNodes(keys, graphElement.node);
+        let edges = this.buildEdges(keys, graphElement.edge);
+        return new Graph(nodes, edges);
+    }
+
+    private static buildKeys(elements: schema.GraphKeyElement[]): AttributeKeyMap {
+        let keys: AttributeKeyMap = {};
+
+        for (let elem of elements) {
+            const keyId: string = elem.$['id'];
+            const name: string = elem.$['attr.name'];
+            const dataType: string = elem.$['attr.type'];
+            const newKey: AttributeKey = new AttributeKey(name, dataType);
+            keys[keyId] = newKey;
+        }
+
+        return keys;
+    }
+
+    private static buildNodes(keys: AttributeKeyMap, elements: schema.GraphNodeElement[]): Array<Node> {
+        let nodes = new Array<Node>();
+
+        for (let node of elements) {
+            const id = node.$['id'];
+
+            let newNode: Node = new Node(id);
+
+            if (node.data !== undefined) {
+                this.buildAttributes(keys, newNode.attributes, node.data);
+            }
+            nodes.push(newNode);
+        }
+
+        return nodes;
+    }
+
+    private static buildEdges(keys: AttributeKeyMap, elements: schema.GraphEdgeElement[]) {
+        let edges = new Array<Edge>();
+
+        for (let edge of elements) {
+            const id: string = edge.$['id']
+            const source: string = edge.$['source'];
+            const target: string = edge.$['target'];
+
+            let newEdge: Edge = new Edge(id, source, target);
+
+            if (edge.data !== undefined) {
+                this.buildAttributes(keys, newEdge.attributes, edge.data);
+            }
+            edges.push(newEdge);
+        }
+
+        return edges;
+    }
+
+    private static buildAttributes(keys: AttributeKeyMap, newAttr: AttributeMap, attributes: schema.GraphDataElement[]): void {
+        for (let attribute of attributes) {
+            const attributeKey: string = attribute.$['key'];
+            const attributeName: string = keys[attributeKey].name;
+            const attributeValue: string = attribute._;
+            const attributeDataType: string = keys[attributeKey].dataType;
+
+            if (attributeDataType === 'int' ||
+                attributeDataType === 'long' ||
+                attributeDataType === 'float' ||
+                attributeDataType === 'double') {
+
+                newAttr[attributeName] = Number(attributeValue);
+
+            }
+            else {
+                newAttr[attributeName] = attributeValue;
+            }
+        }
     }
 }
 
@@ -103,86 +175,7 @@ export class GraphMLParser {
 
             let graphs = document.graphml.graph;
             let keys = document.graphml.key;
-            cb(err, graphs.map((graph: schema.GraphElement) => new GraphBuilder().build(keys, graph)));
+            cb(err, graphs.map((graph: schema.GraphElement) => Graph.create(keys, graph)));
         });
     }
 }
-
-class GraphBuilder {
-    private keys: AttributeKeyMap;
-    private graph: Graph;
-
-    public constructor() {
-        this.keys = {};
-        this.graph = new Graph();
-    }
-
-    public build(keys: schema.GraphKeyElement[], element: schema.GraphElement): Graph {
-        this.buildKeys(keys);
-        this.buildNodes(element.node);
-        this.buildEdges(element.edge);
-        return this.graph;
-    }
-
-    private buildKeys(elements: schema.GraphKeyElement[]) {
-        for (let elem of elements) {
-            const keyId: string = elem.$['id'];
-            const name: string = elem.$['attr.name'];
-            const dataType: string = elem.$['attr.type'];
-            const newKey: AttributeKey = new AttributeKey(name, dataType);
-            this.keys[keyId] = newKey;
-        }
-    }
-
-    private buildNodes(elements: schema.GraphNodeElement[]) {
-
-        for (let node of elements) {
-            const id = node.$['id'];
-
-            let newNode: Node = new Node(id);
-
-            if (node.data !== undefined) {
-                this.buildAttributes(newNode.attributes, node.data);
-            }
-            this.graph.nodes.push(newNode);
-        }
-    }
-
-    private buildEdges(elements: schema.GraphEdgeElement[]) {
-
-        for (let edge of elements) {
-            const id: string = edge.$['id']
-            const source: string = edge.$['source'];
-            const target: string = edge.$['target'];
-
-            let newEdge: Edge = new Edge(id, source, target);
-
-            if (edge.data !== undefined) {
-                this.buildAttributes(newEdge.attributes, edge.data);
-            }
-            this.graph.edges.push(newEdge);
-        }
-    }
-
-    private buildAttributes(newAttr: AttributeMap, attributes: schema.GraphDataElement[]) {
-        for (let attribute of attributes) {
-            const attributeKey: string = attribute.$['key'];
-            const attributeName: string = this.keys[attributeKey].name;
-            const attributeValue: string = attribute._;
-            const attributeDataType: string = this.keys[attributeKey].dataType;
-
-            if (attributeDataType === 'int' ||
-                attributeDataType === 'long' ||
-                attributeDataType === 'float' ||
-                attributeDataType === 'double') {
-
-                newAttr[attributeName] = Number(attributeValue);
-
-            }
-            else {
-                newAttr[attributeName] = attributeValue;
-            }
-        }
-    }
-}
-
