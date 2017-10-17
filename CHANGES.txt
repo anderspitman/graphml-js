@@ -1,0 +1,6 @@
+v0.5.0 Shinya Yamaoka <syamaoka@mail.libmacro.com>
+    * Fixed a bug that GraphMLParser can't parse a GraphML document which has no edge.
+      Nodes of a result graph after parsing is an empty array when no edge is defined
+      in a GraphML document.
+    * Changed the API of GraphMLParser.parse. The callback function passed to GraphML.parse
+      receives an array of Graph as second argument.
