@@ -3,11 +3,15 @@ import * as assert from 'assert';
 import { Graph, GraphMLParser, AttributeMap } from '../src/parser';
 
 describe('graphml parser', function() {
+  let parser = new GraphMLParser();
   it('basic', function() {
     let graphmlText = fs.readFileSync('test/data/test0.graphml', 'utf8');
-    let parser = new GraphMLParser();
 
-    parser.parse(graphmlText, function(err: any, graph: Graph) {
+    parser.parse(graphmlText, function(err: any, graphs: Graph[]) {
+        assert(graphs.length === 1);
+
+        let graph = graphs[0];
+
         assert(graph.nodes !== undefined);
 
         let attr: AttributeMap;
@@ -57,4 +61,29 @@ describe('graphml parser', function() {
         assert.strictEqual(attr['length'], 3e-08);
     });
   });
+
+  it('parse a graph with multiple graphs', function() {
+    let graphmlText = fs.readFileSync('test/data/test1.graphml', 'utf8');
+
+    parser.parse(graphmlText, function(err: any, graphs: Graph[]) {
+        assert(graphs.length === 3);
+        assert(graphs[0].nodes.length === 2);
+        assert(graphs[0].edges.length === 1);
+        assert(graphs[1].nodes.length === 4);
+        assert(graphs[1].edges.length === 4);
+        assert(graphs[2].nodes.length === 3);
+        assert(graphs[2].edges.length === 2);
+    });
+  });
+
+  it('parse a graph with no edge', function() {
+    let graphmlText = fs.readFileSync('test/data/test2.graphml', 'utf8');
+
+    parser.parse(graphmlText, function(err: any, graphs: Graph[]) {
+        assert(graphs.length === 1);
+        assert(graphs[0].nodes.length === 0);
+        assert(graphs[0].edges.length === 0);
+    });
+  });
+
 });

@@ -1,4 +1,5 @@
 import { Parser } from 'xml2js';
+import * as schema from './schema';
 
 export interface AttributeMap {
     [key: string]: any;
@@ -66,12 +67,97 @@ export class Edge extends GraphElement {
 }
 
 export class Graph {
-    nodes: Array<Node>;
-    edges: Array<Edge>;
+    private constructor(public readonly nodes: Array<Node>, public readonly edges: Array<Edge>) { }
 
-    constructor() {
-        this.nodes = new Array<Node>();
-        this.edges = new Array<Edge>();
+    public static create(keyElements: schema.GraphKeyElement[], graphElement: schema.GraphElement): Graph {
+        let keys = this.buildKeys(keyElements);
+        let nodes = this.buildNodes(keys, graphElement.node);
+        let edges = this.buildEdges(keys, graphElement.edge);
+        return new Graph(nodes, edges);
+    }
+
+    private static buildKeys(elements: schema.GraphKeyElement[] | null): AttributeKeyMap {
+        if (typeof(elements) === undefined || elements == null) {
+            return {};
+        }
+
+        let keys: AttributeKeyMap = {};
+
+
+        for (let elem of elements) {
+            const keyId: string = elem.$['id'];
+            const name: string = elem.$['attr.name'];
+            const dataType: string = elem.$['attr.type'];
+            const newKey: AttributeKey = new AttributeKey(name, dataType);
+            keys[keyId] = newKey;
+        }
+
+        return keys;
+    }
+
+    private static buildNodes(keys: AttributeKeyMap, elements: schema.GraphNodeElement[] | null): Array<Node> {
+        if (typeof(elements) === undefined || elements == null) {
+            return [];
+        }
+
+        let nodes = new Array<Node>();
+
+        for (let node of elements) {
+            const id = node.$['id'];
+
+            let newNode: Node = new Node(id);
+
+            if (node.data !== undefined) {
+                this.buildAttributes(keys, newNode.attributes, node.data);
+            }
+            nodes.push(newNode);
+        }
+
+        return nodes;
+    }
+
+    private static buildEdges(keys: AttributeKeyMap, elements: schema.GraphEdgeElement[] | null) {
+        if (typeof(elements) === undefined || elements == null) {
+            return [];
+        }
+
+        let edges = new Array<Edge>();
+
+        for (let edge of elements) {
+            const id: string = edge.$['id']
+            const source: string = edge.$['source'];
+            const target: string = edge.$['target'];
+
+            let newEdge: Edge = new Edge(id, source, target);
+
+            if (edge.data !== undefined) {
+                this.buildAttributes(keys, newEdge.attributes, edge.data);
+            }
+            edges.push(newEdge);
+        }
+
+        return edges;
+    }
+
+    private static buildAttributes(keys: AttributeKeyMap, newAttr: AttributeMap, attributes: schema.GraphDataElement[]): void {
+        for (let attribute of attributes) {
+            const attributeKey: string = attribute.$['key'];
+            const attributeName: string = keys[attributeKey].name;
+            const attributeValue: string = attribute._;
+            const attributeDataType: string = keys[attributeKey].dataType;
+
+            if (attributeDataType === 'int' ||
+                attributeDataType === 'long' ||
+                attributeDataType === 'float' ||
+                attributeDataType === 'double') {
+
+                newAttr[attributeName] = Number(attributeValue);
+
+            }
+            else {
+                newAttr[attributeName] = attributeValue;
+            }
+        }
     }
 }
 
@@ -90,91 +176,19 @@ interface AttributeKeyMap {
 }
 
 export class GraphMLParser {
-    private keys: AttributeKeyMap;
-    private graph: Graph;
-
-    public constructor() {
-        this.keys = {};
-        this.graph = new Graph();
-    }
-
     public parse(text: string, cb?: Function) {
 
         let parser = new Parser();
 
-        parser.parseString(text, (err: any, data: any) => {
-            this.buildKeys(data);
-            this.buildNodes(data);
-            this.buildEdges(data);
+        parser.parseString(text, (err: any, document: schema.GraphMLDocument) => {
+            if (err) {
+                cb(err, []);
+                return;
+            }
 
-            cb(err, this.graph);
+            let graphs = document.graphml.graph;
+            let keys = document.graphml.key;
+            cb(err, graphs.map((graph: schema.GraphElement) => Graph.create(keys, graph)));
         });
     }
-
-    private buildKeys(data: any) {
-        for (let i in data.graphml.key) {
-            const key: any = data.graphml.key[i]['$'];
-            const keyId: string = key.id;
-            const name: string = key['attr.name'];
-            const dataType: string = key['attr.type'];
-            const newKey: AttributeKey = new AttributeKey(name, dataType);
-            this.keys[keyId] = newKey;
-        }
-    }
-
-    private buildNodes(data: any) {
-
-        const nodes: any = data.graphml.graph[0].node;
-
-        for (let node of nodes) {
-            const id = node['$'].id;
-
-            let newNode: Node = new Node(id);
-
-            if (node.data !== undefined) {
-                this.buildAttributes(newNode.attributes, node.data);
-            }
-            this.graph.nodes.push(newNode);
-        }
-    }
-
-    private buildEdges(data: any) {
-
-        const edges: any = data.graphml.graph[0].edge;
-
-        for (let edge of edges) {
-            const id: string  = edge['$'].id;
-            const source: string = edge['$'].source;
-            const target: string = edge['$'].target;
-
-            let newEdge: Edge = new Edge(id, source, target);
-
-            if (edge.data !== undefined) {
-                this.buildAttributes(newEdge.attributes, edge.data);
-            }
-            this.graph.edges.push(newEdge);
-        }
-    }
-
-    private buildAttributes(newAttr: AttributeMap, attributes: any) {
-        for (let attribute of attributes) {
-            const attributeKey: string = attribute['$'].key;
-            const attributeName: string = this.keys[attributeKey].name;
-            const attributeValue: string = attribute['_'];
-            const attributeDataType: string = this.keys[attributeKey].dataType;
-
-            if (attributeDataType === 'int' ||
-                attributeDataType === 'long' ||
-                attributeDataType === 'float' ||
-                attributeDataType === 'double') {
-                
-                newAttr[attributeName] = Number(attributeValue);
-
-            }
-            else {
-                newAttr[attributeName] = attributeValue;
-            }
-        }
-    }
 }
-
